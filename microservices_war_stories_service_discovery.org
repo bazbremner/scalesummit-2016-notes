@@ -1,0 +1,107 @@
+* Microservices War Stories and Container Service Discovery
+- Problem: existing monolith, carving up into microservices
+- What works, what doesn't.
+- Testing and dependancy management is one big headache
+- How do we effectively monitor microservices
+- Discovery seems like a mostly solved problems: what is everyone
+  doing?
+* Are people using containers or not?
+- several teams deploying 
+* How many services?
+- One team has ~170 services
+- Another 400 or so
+* How are you managing the dependancies?
+- "We don't" - for start-up order - services should come up and start working as soon as
+  possible - retry
+- For API version compatibilities: http://swagger.io/ and
+  http://raml.org/
+* How are you versioning the API? How many do you support?
+- Original person uses /v1/ etc in URLs. Easy to tell what's going on
+- Up to the teams to decide how long they want to support older
+  versions.
+- Teams are providing a contract to their customers - have to ensure
+  they provide a stable API
+* How do you know who your customers are?
+- It's a pain point
+- A caller DDoSing an endpoint - was hard to tell whose system that is
+- Planning on adding Kong API server https://getkong.org/
+- Another school of thought would be to build token management into
+  each microservice, somewhat more de-centralised
+- FIXME: apogee?
+* How do you manage tracing?
+- Looking at Zipkin from Twitter - have to instrument the code and run
+  the service yourself
+- If you're using docker, Weavescope looks like it can trace traffic
+  to containers
+- sysdig's commercial offering sounds interesting, but so far was "a
+  car crash" when dealing with a lot of traffic
+- using SmartStack, as all the traffic is going through a proxy on
+  localhost it's being logged, so it's easy to ensure 
+* Migrating from monolith to microservices
+- Already had authenication
+- Use capability based roles to generate URLs for clients and direct
+  different users base on that.
+- Can then trace that back to the caller and find out where
+  problematic users/customers
+- Depends on the initial service doing 'proper' authentication, it can
+  then introduce callers to downstream services
+* What about service discovery
+** Smartstack. http://nerds.airbnb.com/smartstack-service-discovery-cloud/
+- Can be very chatty in the logs when there are lots of microservices,
+  so haproxy being restarted frequently
+- Yelp have blogged about this and a solution:
+  http://engineeringblog.yelp.com/2015/04/true-zero-downtime-haproxy-reloads.html
+** Consul
+* Anyone running multi-region or multi-AZ discovery?
+- Smartstack handles this very well
+- Scope of how discoverable a service is can be controlled
+* What schedulers are people using?
+- Referred to session from earlier today
+  (https://github.com/bazbremner/scalesummit-2016-notes/blob/master/container_schedulers.org)
+- In this room (~40-50 people) only 4-5 are even running a scheduler.
+* Are people using request ids to help trace requests?
+- Yes.
+- Are using Kafka, but the request-ids aren't being passed through it
+  yet.
+* How deep are your stacks of services?
+- 5-6 (with a total of ~150 services, call isn't too deep)
+* How are you supporting hundreds of services?
+- You build it, you support it.
+- No-one supports it, worryingly common.
+* What languages?
+- In theory, a developer can select anything, but most organisations
+  or teams are good at chosing something the team can support.
+- Mono wasn't a good experience; .NET core has run well on ECS
+* War stories
+** Timeouts
+- Set timeouts or circuit breakers
+*** Anyone using Netflix's Hystrix?
+- seemed to work quite well in one project
+*** linkerd (https://linkerd.io/ ?)
+*** Go kit (https://github.com/go-kit/kit) and Go micro https://github.com/micro/go-micro 
+- add useful standard features for microservice systems
+* Testing
+** Don't stand up every service to test one thing - do that early
+- If you've got a "stable" test environment, it's easy to run
+  everything
+- harder to do this in dynamic environments
+** Test in live
+- Facebook do not have a staging area
+- Test is a seperate graph to the production graph, but tests do
+  connect to production systems
+- But there is an enforced separation of data created by test systems
+  from production systems
+- Start on a local dev service, your changed code is local, but
+  everything else is in production.
+- [ ed: it's very hard to grok the subtleties of this approach and
+  explain it ]
+** If you're not as brave/weird enough to test in live, what else, how do you stand up a whole environment?
+- Complete, namespaced environments per developer
+- It will fail: you have to deal with it
+** Healthchecks
+- Exposing health information is useful
+- One view: it should be the consumer's job to decide what 'healthy'
+  is - what is an acceptable response time for the consumer - don't
+  force it.
+- War story: don't write a health check that generates more load than
+  your valid traffic.
