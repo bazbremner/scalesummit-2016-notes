@@ -1,0 +1,157 @@
+* Problem: sharing code across a large organisation - in this case
+governemnt. Find other parts of the group re-implement solutions to
+the same problem.
+
+* Early days, but trying internal open source model.
+- Pretend you're external - don't depend on being in the same
+  building.
+- If you can, open source it.
+- Document as if it's for the public - and for a new starter, they
+  _are_, so helps with onboarding
+- Do some marketing
+** OP has tried writing posts and still there is another solution created.
+
+* Why is it a problem to have two solutions?
+- Waste of money (especially with public funds, but applies anywhere)
+- Have to watch out for superficial similarity - looks like the same
+  problem to start, but it doesn't turn out that way, so two solutions
+  are sometimes OK
+- If two parts of the org know about each other, then it might help to
+  steer the earlier design decisions, avoiding two or more solutions
+- "Open source" to one person seems like it's a collection of people,
+  but not necessilary focusing on a particular problem, don't always
+  get the right cross-polination
+* Shouldn't under-estimate the cost of coordination and the on-going maintenance 
+- Writing two solutions _might_ be cheaper.
+- There is a cost to having and maintaining your own codebases, so
+  hard to analyse.
+- Have communities, not code sharing. Too often framed as "let's
+  share code"
+- Does code sharing fall out of community?
+- There's a lot of effort put into code sharing, but it should be put
+  into building communities
+- Or, build the service/platfrom that provides functionality - rather than just
+  the code
+- Building and operating a service is expensive - takes skilled people
+- Open source has demonstrated some of this - lots of similar solutons
+  to simiar problems, but the solutions are more focused - easier to
+  build many solutions.
+* Sharing code is _hard_
+- Different target systems
+- Different problems
+- Dependancy management systems
+- The bigger the problem space, the harder to build something that can
+  be reused and tick all the boxes is hard
+* You must always be promoting your system
+- Find your customers
+- Speaker built a platform and client libraries
+* "code sharing" looks like a "techy task"
+- Justifying the cost of building of a community is harder to sell
+* What's the active work to build a community?
+** Guild approach
+- Different groups for different activities: i.e. running in AWS,
+  Java, Python
+- Slack
+- Webinars every two weeks
+- Presenting to groups of engineers to share knowledge (400 engineers
+  over 10 offices)
+- People are often in 4-5 groups, overlap based on their skills,
+  interests.
+** Q: internal or external?
+- Mostly internal, although some work is re-used for external commmity
+* Q: at large social network - how did it all start, how do you get people to use your tools?
+- Almost everything starts at a hack-a-thon
+- Weekly news letter to showcase early prototypes
+- Teams will use and adopt new tools, or they die off.
+- Make an effort to productionise from the hack-a-thon prototypes.
+- Some projects are open sourced to allow further projects that build
+  upon them to be open sourced, but it's useful to support other tools
+  to ensure people aren't forced to use one tool that might go away
+  (i.e. supporting different build tools)
+- Open sourcing helps with internal distribution - Hacker News post
+  helped internal groups find out about an internal project (that was
+  communicated internally)
+- Open source helps with recruitment and shop window.
+* How do you make the leap from hack a thon to production - how do you justify that to the business?
+- Sometimes it's many hackathons and the ball gets rolling as more and
+  more people get interested and use the worthy projects
+- Hackathons are 20% time
+- If it's a larger project, then it takes effort to get the buy in
+** In risk adverse cultures, it's harder to do this
+- But if you have the will, you have to push
+- You need people to be passionate about their code or services and be
+  willing to push it (regardless of company culture).
+- If you're not willing to push your system, you're probably not going
+  to fix it when it's on fire.
+* Push vs pull information sources
+- Weekly news letters in the toilets (yes, really)
+- Mailing lists
+- Blog posts
+- What else?
+** Is there am implicit value tied to lines of code written, or is there value to the community?
+- How do you persuade people making the business/value decisions that
+  it's worthwhile making the time to do these 20% projects etc?
+- example is from last year's microservice session - mention of
+  company (possibly Netflix) having internal competing services and
+  there's effectively internal market forces at work.
+- Multiple implementations might inspire other teams
+- It's a lot of effort to put in to build many things
+* How early on can people get together and figure out what to do?
+- Whatever silos you have, it's an organisational trade-off, that's
+  there's value in getting each silo to talk to each other. You
+  _could_ put a number on it if you had to.
+- Ex: 20 product teams, doing their own thing, duplication of effort,
+  so additional expense. So, mandating top down might be possible.
+- Company mandates aren't a thing - a lot more come from the bottom up
+- If you're building new tech, figure out route to market, prove it's
+  useful to others. You're not going to get people to get involved in
+  vapourware. Prove it first.
+- There is something about converging opinions before trying to share
+  code.
+- Have an awarenes of what other people are doing.
+- Valve have 'expressions of interest': before building a new thing,
+  they send out a note, asking if other people have experience with
+  'thing', if anyone is interested in building in it, or have
+  overlapping needs.
+- We don't do a good job of figuring this out in the open source work.
+* Interesting problem person found a Python framework that finds code for you
+- Write a test
+- Framework runs the test against all of the standard library to find
+  a function that passes that test for you.
+- Works well for well defined interfaces
+* Is it the developer's resposibilty to promote their code?
+- Is it handy to have a passionate engineer 
+- Also requires someone from on-high that can spot the common patterns
+  and make connections
+- Advocacy is marketing, might not be the best model for actual
+  sharing
+* The size of the thing you share is important
+- If you do share it and no-one uses it, is still has value
+- Better documentation
+- Fewer dependancies
+- You might still be able to share several small parts - much harder
+  to share a big part.
+* There is so much code generated by Governement, that's a lot of noise
+- Finding something that you want to solve your problem is difficult
+- Github is not the best interface for this
+- Etsy's Hound - multi-repo search tool - has been very useful: both
+  to track down bugs as well as to find new code.
+* How would you share as a service, rather than just as code?
+- Extra bit from someone else: who writes the mocks for tests
+- It becomes its own product
+- You have to talk to your customers and evolve the product
+- It will have its own lifecycle
+** Lower level answer
+- Internal solution, read postcodes into memory, library to do that
+  was shareable code.
+- Moved to sharing over HTTP/REST inreface.
+- Reduced dependacies
+* Have a post-mortem when there a was a lot of time/money spent building multiple solutions.
+- Example: "we have 150 case management systems, why can't we have
+  one"
+- People are spotting false patterns much of the time
+- You need to get to blame-less.
+- "This code wasn't reused" is a very different to "the website went
+  down" for a post-mortem
+- But then "we didn't encourage research before building our solution"
+  is an institutional problem, which would be worth addressing.
