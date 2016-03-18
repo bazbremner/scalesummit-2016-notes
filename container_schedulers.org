@@ -1,0 +1,175 @@
+* Who is using a scheduler for prod workloads?
+** Few hands go up
+** One team using Meso and Marathon.
+*** Summary: Don't.
+- Opache
+- Loses state
+- Logs are chatty
+- Ocassionally works, generally doesn't inspire confidence
+- Other teams do also use it
+- Scheduling JVM-based docker containers
+*** Alternative: seems OK
+- Distributed cron - cronos - similar expericnes, stops scheduling
+  things, no errors, jsut stops
+- Meso and Martaton has its warts
+- Running for about a year, improving over time
+- MAraton for HTTP APIs and long-running tasks
+- Docker gives more problems than Marathon.
+- Couple of hundred nodes in a cluster
+- As far as they know 200 up to 1000 nodes should be fine with Meso
+*** Q: are you both using it for the same use case?
+- Both having problems with docker giving issues
+*** Another team: CI infra
+- Doing work to use fensa (sp?) from Netflix
+- 90 OS systems, different architectures, all need to be tested
+- using mesos as the mechanism for scheduling all that testing work
+*** Another team had difficulty with Chronos 
+*** q: are you both using DeisOS?
+*** Q: anyone using Kubernes on AWS?
+- No experience in the room
+**** More general Kubernese comments later, comparing to Noman
+- Nomad only does the scheduling
+*** Q: anyone using Nomad?
+- Still very new
+- One or two experimented only
+- Very low level, more akin to Mesos
+- Porbalby need to do a lot of glue to get a solution working.
+*** One team using Smart Stack for service discovery
+
+*** Can see the direction of travel with the new schedulers
+- This group fairly on the bleeding edge
+- Watch the roadmap for these schedulers - none of them are finished.
+*** How much of a risk is all this?
+- Now Google Compute is GA, it's stable, pretty good.
+- Before that, things were changing all the time.
+- Latest version of Kube 30k containers per host
+- Lots of marketing at the moment: Hashicorp's C1M post, Google
+  talking large numbers too
+- They are marketing! Docker Swarm, Docker Datacentre
+*** Only one or two people have even tried Swarm
+- Swarm initially appeared to just get into the space
+*** Kube seems to have all the attention
+- But at KubeCon, no-one is using Kube for data bases, a lot of people
+  use the phrase "playing with it"
+*** More, larger orgs using Mesos.
+- Apple
+- Yelp
+- Others, but they're not public.
+*** If you're using Kubernetes, don't try to install it yourself, just like OpenStack
+- Tectonic another similar service
+*** No-one has talked about CloudFoundry
+- Q: Why should we run it?
+- Depends on your use case
+- It's not a general purpose scheduler.
+- Best suited for 12 factor apps, ideally build on top of build-packs
+  (similar to Heroku)
+- A lot of the beauty of PaaS is in the constaints if that fits
+- Lots of moving parts, complex, changing a lot
+- As soon as you scratch the service of other things, you realising
+  you end up building your own implementation of CloudFoundry
+- We haven't got a better way of building large, discrete systems
+*** Triton (from Joyent)
+- Very good team
+- Very fast as a platform
+- Solaris fork (Illumos), running Linux containers
+- Linux on top of Solaris seems like a recipe for disaster (but it
+  seems in the real world, it works)
+- The design is really sound
+
+*** If you're on AWS, but are you running
+**** ECS
+- "Quite frankly, I'd describe it as bizarre"
+- Had issues deploying with CloudFoundation
+- Had to contact support
+- Some docs about service discovery. Docs don't really work, had to
+  roll their own.
+- Essentially docker-compose in JSON, but slightly different.
+- Main benefit: promise of 1st class support of containers on AWS: IAM
+  roles etc.
+- For now, it's ugly
+- Only running five nodes, management nodes at the moment.
+**** For a customer we implemented ECS (Amazon gave customer lots of credits)
+- HAProxy + consul
+- Basically re-implemented SmartStack
+** It's not in AWS's interest to accelerate adaoption/push containers
+*** Disagreement on this point - Amazon appear to be hiring and realise they have a gap.
+*** EFS (shared filesystem) looks interesting.
+** Just getting customers into containers is hard
+** New greenfield project: what do we do. Looking at ECS.
+*** If not tied to AWS, look at Google 
+*** Otherwise, build AMIs with packer and use all the support already in AWS
+*** Openshift and having other people doing the integration is good.
+- "Redhat don't seem to be getting cloud"
+- Openshift 3 seems a big improvement over earlier versions.
+- More things in "Origin" - the open source varient
+** docker on AWS, but early in the project, is there any point putting a scheduler in?
+- Letting the devs spin up docker containers is a really useful
+  benefit
+- Just using docker as a deployment artifact, that's just fine
+- Schedler is for massive scale, that's not a lot of people's problem
+- One container per node isn't completely unheard of
+- Auto-Scaling Group (ASG) is just a scheduler, but at a different
+  level - use it.
+- AWS t2 burstable instances cover a lot of the variable load benefit 
+** Job type scheduling
+- Some tasks run for days, others very quick
+- Optimising and packing the use over a couple of hundred CPUs -
+  having scheduling to make the most us is handy.
+** A good question is "do you need a scheduler"?
+- Should be your first question!
+- If you succeed and it's going to be big, building in a scheduler
+  like Kubernetes early is a good thing
+- However, this should be your first question
+- Kubernetes does force you to do things the right way, this is a
+  useful constraint.
+- Seems like a very Google way to do things: Go is similar for
+  programming languages.
+* A problem we've had with Meso/Marathon
+- running in eu-west-1, in an empty environemnt, starts 9/12 nodes in
+  one place, not obvious. Do other systems have constraints/logic?
+- Kubernetes can define were pods go
+- It's a feature, not a bug - it's the computer's job - let it do it.
+- If you start second guessing the system, you're going to write your
+  own scheduler.
+- If you're getting hot spots, you've set the resources wrong
+- On marathon you can say that tasks shouldn't run on the same machine
+- If you want to ensure something runs everywhere, that's harder, but
+  can be hacked in by setting certain thresholds very high (sorry,
+  didn't catch where)
+- Nomad has different types of scheduler - system (runs everywhere),
+  periodic (distibuted cron) and normal (run N of these) which is
+  nice.
+- Don't write your own scheduler - one team did this and regretted it.
+* Nomad seems like primitives
+- "Maybe I'm getting old, but I don't want to build more things on
+  top"
+- different people think different ways
+* What about the future?
+** If nothing is suitable now, what's happening in a year?
+- Kubernetes have a design document, there's a roadmap. That's missing
+  from a lot of projects.
+- The Google folk had a huge advantage from building Borg (earlier
+  system), so they knew what they were going to build
+- Between Redhat and Google, there's a lot going on. Don't
+  under-estimate that core skill.
+- Kubernetes is still heavily Google.
+- Meteor contributing a lot of the AWS features into Kubernetes.
+- The _design_ site is very Google heavy (which can be a good thing -
+  focused and consistent)
+* What if you're running multi-cloud?
+- Probably Kubernetes
+* What now?
+** Dev/test: 25%
+- Kubernets: 4
+- Meso: ~8
+- ECS: ~10
+- Swarm: 2
+- Homegrown: 1
+- Nothing: Probably about ~25
+** Having to run an overlay network in AWS network to get enough IPs is a bit of a headache.
+** installing Kubernetes is not as easy as you'd hope.
+- Just running the SaltStack as documented is not nearly as it
+  promises. Avoid.
+* Vote on the future
+
+[ ran out of time ]
