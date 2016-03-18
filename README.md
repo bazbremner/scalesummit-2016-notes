@@ -7,3 +7,5 @@ https://github.com/bazbremner/scalesummit-2015-notes
 
 If you spot any mistakes or you also took some notes you'd like me to
 link to, please open a PR!
+
+James Abley has his notes at https://gist.github.com/jabley/b37f8477d40962bde703
