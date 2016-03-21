@@ -9,3 +9,6 @@ If you spot any mistakes or you also took some notes you'd like me to
 link to, please open a PR!
 
 James Abley has his notes at https://gist.github.com/jabley/b37f8477d40962bde703
+
+Andrew Langhorn wrote up his thoughts at
+http://ajlanghorn.com/blog/2016/03/19/scale-summit-2016/
