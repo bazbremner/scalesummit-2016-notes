@@ -20,3 +20,7 @@ https://gist.github.com/d6y/ef731b625d34bb799694 (afternoon session).
 
 Andrew Langhorn wrote up his thoughts at
 http://ajlanghorn.com/blog/2016/03/19/scale-summit-2016/
+
+Anna Shipman wrote up her session on code sharing in large
+organisations at http://www.annashipman.co.uk/jfdi/code-sharing.html
+
